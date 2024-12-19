@@ -4,3 +4,4 @@ package-lock.json
 uploads/*
 keys/private.pem
 keys/public.pem
+logs/*

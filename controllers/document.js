@@ -1,6 +1,6 @@
 const { populate } = require('dotenv')
 const Document = require('../models/document')
-
+const logger = require('../utils/logger')
 
 exports.createDocument = async (req, res) => {
     try
@@ -46,7 +46,7 @@ exports.createDocument = async (req, res) => {
     }
     catch(err) 
     {
-        console.log(err)
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -89,6 +89,7 @@ exports.getAllDocuments = async (req, res) => {
     }
     catch(err) 
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -121,6 +122,7 @@ exports.getDocuments = async (req, res) => {
     }
     catch(err) 
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -152,6 +154,7 @@ exports.getDocumentsById = async (req, res) => {
     }
     catch(err) 
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -209,6 +212,7 @@ exports.updateDocumentStudent = async (req, res) => {
     }
     catch(err) 
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -265,6 +269,7 @@ exports.updateDocumentAdmin = async (req, res) => {
     }
     catch(err) 
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',

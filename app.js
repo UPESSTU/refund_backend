@@ -2,22 +2,24 @@
 require('dotenv').config()
 
 const express = require('express'), 
-    mongoose = require('mongoose'),
-    cors = require('cors'),
-    bodyParser = require("body-parser"),
-    swaggerJsdoc = require("swagger-jsdoc"),
-    swaggerUi = require("swagger-ui-express")
+      mongoose = require('mongoose'),
+      cors = require('cors'),
+      bodyParser = require("body-parser"),
+      swaggerJsdoc = require("swagger-jsdoc"),
+      swaggerUi = require("swagger-ui-express"),
+      logger = require('./utils/logger'),
+      rateLimiter = require('./utils/rateLimiter')
 
 
 //Route Imports
-const authRoutes = require('./routes/auth')
-const dueRoutes = require('./routes/due')
-const documentRoutes = require('./routes/document')
-const userRoutes = require('./routes/user')
-const fileRoutes = require('./routes/file')
+const authRoutes = require('./routes/auth'),
+      dueRoutes = require('./routes/due'),
+      documentRoutes = require('./routes/document'),
+      userRoutes = require('./routes/user'),
+      fileRoutes = require('./routes/file')
 
 
-const { checkJwt, checkAuthentication, checkAdmin } = require('./middlewares/auth')
+const { checkJwt, checkAuthentication } = require('./middlewares/auth')
 
 const options = {
     definition: {
@@ -46,9 +48,9 @@ const PORT = process.env.PORT || 8000
 const DATBASE_URI = process.env.DATABASE_URI
 const specs = swaggerJsdoc(options)
 
-
-
 const app = express() //Init Express App
+
+app.use(rateLimiter)
 
 app.use(
   "/docs",
@@ -68,16 +70,12 @@ app.use(cors({
 
 app.use(express.json())
 
-
 //Routes
 app.use('/auth', authRoutes)
 app.use('/user', checkJwt, checkAuthentication, userRoutes)
 app.use('/due', checkJwt, checkAuthentication, dueRoutes)
 app.use('/document', checkJwt, checkAuthentication, documentRoutes)
 app.use('/file', checkJwt, checkAuthentication, fileRoutes)
-
-
-
 
 //Middleware Custom Response
 app.use(async (err, req, res, next ) => {
@@ -92,18 +90,17 @@ app.use(async (err, req, res, next ) => {
         next(err) //If No Error Take Call The Next Function
 })
 
-
 //Database Connection 
 mongoose
     .connect(DATBASE_URI,  {
         
     })
     .then(() => {
-        console.log("Database Connected!")
+        logger.info("Database Connected!")
         app.listen(PORT, () => {
-            console.log(`Server Running At PORT: ${PORT}`)
+            logger.info(`Server Running At PORT: ${PORT}`)
         })
     })
     .catch((err) => {
-        console.log(err)
+        logger.error(`Error: ${err.toString()}`)
     })

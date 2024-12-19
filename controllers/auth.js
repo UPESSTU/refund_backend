@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const fs = require('fs')
 const path = require('path')
+const logger = require('../utils/logger')
 
 const PRIVATE_KEY = fs.readFileSync(
     path.join(
@@ -88,6 +89,7 @@ exports.signUp = async (req, res) => {
 
 
     }catch(err) {
+        logger.error(`Error: ${err.toString()}`)
         return res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured!',
@@ -150,7 +152,7 @@ exports.signIn = async (req, res) => {
             path: "/", //path of the cookie
             domain: process.env.DOMAIN, //domain of the site
         })
-
+        logger.info(`User Logged In With The SAPID: ${response.sapId}`)
         res.status(200).json({
             success: true,
             message: 'Logged In!',
@@ -161,6 +163,7 @@ exports.signIn = async (req, res) => {
 
 
     }catch(err) {
+        logger.error(`Error: ${err.toString()}`)
         return res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured!',
@@ -181,7 +184,7 @@ exports.loggout = async (req, res) => {
             redirect: true
         })
     }catch(err) {
-        //If Error Give Error Response 
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: err

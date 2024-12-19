@@ -1,5 +1,5 @@
 const Due = require('../models/due')
-
+const logger = require('../utils/logger')
 
 exports.createDue = async (req, res) => {
     try
@@ -42,6 +42,7 @@ exports.createDue = async (req, res) => {
     }
     catch(err) 
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -71,6 +72,7 @@ exports.getDue = async (req, res) => {
     }
     catch(err) 
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -113,6 +115,7 @@ exports.getAllDues = async (req, res) => {
     }
     catch(err) 
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -143,6 +146,7 @@ exports.getDueById = async (req, res) => {
     }
     catch(err) 
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -195,6 +199,7 @@ exports.updateDueStudent = async (req, res) => {
     }
     catch(err) 
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -267,6 +272,7 @@ exports.updateDueAdmin = async (req, res) => {
     }
     catch(err) 
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',

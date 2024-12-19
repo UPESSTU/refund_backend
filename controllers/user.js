@@ -1,5 +1,5 @@
 const User = require('../models/user')
-
+const logger = require('../utils/logger')
 
 
 
@@ -17,7 +17,7 @@ exports.getUserBy_id = async (userId) => {
         return user
 
     }catch(err) {
-
+        logger.error(`Error: ${err.toString()}`)
         return null
 
     }
@@ -30,15 +30,13 @@ exports.getUserById = async (req, res) => {
 
         let user = await this.getUserBy_id(userId)
 
-        user.emailAddress = undefined
 
-        user.salt
         if(!user)
             return res.status(404).json({
                 error: true,
                 message: 'Content Not Found!'
             })
-
+        logger.info(`User Fetched With ID: ${user._id}`)
         res.json({
             success: true,
             message: "User Fetched!",
@@ -47,6 +45,7 @@ exports.getUserById = async (req, res) => {
 
     }catch(err) {
 
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: "An Unexpected Error Occurrred",
@@ -71,6 +70,7 @@ exports.getProfile = async (req, res) => {
                 message: 'Content Not Found!'
             })
 
+        logger.info(`Profile With ID: ${user._id} Viewd`)
         res.json({
             success: true,
             message: "User Fetched!",
@@ -78,6 +78,7 @@ exports.getProfile = async (req, res) => {
         })
 
     }catch(err) {
+        logger.error(`Error: ${err.toString()}`)
         return res.status(400).json({
             error: true,
             message: "An Unexpected Error Occurrred",
@@ -136,6 +137,7 @@ exports.updateStudent = async (req, res) => {
 
         response.salt = undefined
         response.encpy_password = undefined
+        logger.info(`User Updated With ID: ${req.auth._id} Body Data: ${JSON.stringify(req.body)}`)
        
         res.json({
             success: true,
@@ -144,6 +146,7 @@ exports.updateStudent = async (req, res) => {
         })
 
     }catch(err) {
+        logger.error(`Error: ${err.toString()}`)
         return res.status(400).json({
             error: true,
             message: "An Unexpected Error Occurrred",

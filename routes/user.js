@@ -21,7 +21,42 @@ const router = Router()
  *       bearerFormat: JWT
  */
 
-// router.post('/student/update', checkJwt, checkAuthentication, checkStudent, updateStudent)
+router.put('/student/update', checkJwt, checkAuthentication, checkStudent, updateStudent)
+/**
+ * @swagger
+ * /user/student/update:
+ *   put:
+ *     summary: Student Update Data
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               apaarId:
+ *                 type: string
+ *                 description: ABCID String (required)
+ *               adhaarNumber:
+ *                 type: number
+ *                 description: Adhaar Card Number (required)
+ *               dateOfBirth:
+ *                 type: string
+ *                 description: YYY-MM-DD String (optional)
+ *              
+ *     responses:
+ *       200:
+ *         description: Successful Update
+ *       401:
+ *         description: Unauthorized Access
+ *       400:
+ *         description: Invalid input
+ *       500:
+ *         description: Some server error
+ */
 
 router.get('/profile', checkJwt, checkAuthentication, getProfile)
 /**

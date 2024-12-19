@@ -1,7 +1,6 @@
-const { error } = require('console')
 const File = require('../models/file')
 const path = require('path')
-
+const logger = require('../utils/logger')
 exports.newFile = async (req, res) => {
 
     try
@@ -30,6 +29,7 @@ exports.newFile = async (req, res) => {
     }
     catch(err)
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -43,7 +43,6 @@ exports.getFile = async (req, res) => {
     try
     {
        
-        console.log(req.auth)
         const {
             fileId
         } = req.params
@@ -59,6 +58,7 @@ exports.getFile = async (req, res) => {
     }
     catch(err)
     {
+        logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
