@@ -62,6 +62,8 @@ router.get('/logout', loggout)
  *   get:
  *     summary: Logout 
  *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Successfull Logout
