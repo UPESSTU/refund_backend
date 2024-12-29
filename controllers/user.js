@@ -97,7 +97,8 @@ exports.updateStudent = async (req, res) => {
         const {
             dateOfBirth,
             adhaarNumber,
-            apaarId
+            apaarId,
+            programName,
         } = req.body
 
         if(adhaarNumber === "" || !adhaarNumber)
@@ -128,7 +129,8 @@ exports.updateStudent = async (req, res) => {
             {
                 adhaarNumber: adhaarNumber,
                 apaarId: apaarId,
-                dateOfBirth: unixTimestamp
+                dateOfBirth: unixTimestamp,
+                programName: programName
             },
             {
                 new: true

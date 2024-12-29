@@ -5,6 +5,7 @@ exports.newFile = async (req, res) => {
 
     try
     {
+        console.log(req.file)
         const {
             filename,
             path,

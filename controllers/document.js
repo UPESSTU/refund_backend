@@ -3,24 +3,39 @@ const Document = require('../models/document')
 const logger = require('../utils/logger')
 
 exports.createDocument = async (req, res) => {
+    console.log("got here");
+    console.log(req.body);
     try
     {
         const {
-            passportPhoto,
-            classTenMarksheet,
-            studentSignature,
-            adhaarCardFront,
-            adhaarCardBack,
-            gazetteNotification,
-            gazetteNotificationSerial,
-            notarizeAffidavit
-        } = req.body
+          passportPhoto,
+          classTenMarksheet,
+          studentSignature,
+          adhaarCardFront,
+          adhaarCardBack,
+          gazetteNotification,
+          gazetteNotificationSerial,
+          notarizeAffidavit,
+          newspaperCutting,
+        } = req.body;
 
-        if(!(passportPhoto && classTenMarksheet && studentSignature && adhaarCardBack && adhaarCardFront && gazetteNotification && gazetteNotificationSerial && notarizeAffidavit))
-            return res.status(400).json({
-                error: true,
-                message: 'An Unexpected Error Occured'
-            })
+        if (
+          !(
+            passportPhoto &&
+            classTenMarksheet &&
+            studentSignature &&
+            adhaarCardBack &&
+            adhaarCardFront 
+            // gazetteNotification &&
+            // gazetteNotificationSerial &&
+            // notarizeAffidavit &&
+            // newspaperCutting
+          )
+        )
+          return res.status(400).json({
+            error: true,
+            message: "An Unexpected Error Occured",
+          });
         const doc = { 
             student: req.auth._id,
             gazetteNotificationSerial: gazetteNotificationSerial
@@ -33,6 +48,7 @@ exports.createDocument = async (req, res) => {
         adhaarCardBack ? doc.adhaarCardBack = { file: adhaarCardBack } : null
         gazetteNotification ? doc.gazetteNotification = { file: gazetteNotification } : null
         notarizeAffidavit ? doc.notarizeAffidavit = { file: notarizeAffidavit } : null
+        newspaperCutting ? doc.newspaperCutting = { file: newspaperCutting } : null
 
         const document = new Document(doc)
 
@@ -102,12 +118,12 @@ exports.getAllDocuments = async (req, res) => {
 exports.getDocuments = async (req, res) => {
     try
     {
-        const response = await Document.findOne({ 
-            student: req.auth._id 
+        const response = await Document.findOne({
+          student: req.auth._id,
         }).populate(
-            'student passportPhoto.file studentSignature.file classTenMarksheet.file gazetteNotification.file adhaarCardFront.file adhaarCardBack.file notarizeAffidavit.file', 
-            '-salt -encpy_password -adhaarNumber -apaarId -filePath -fileName'
-        )
+          "student passportPhoto.file studentSignature.file classTenMarksheet.file gazetteNotification.file adhaarCardFront.file adhaarCardBack.file newspaperCutting.file notarizeAffidavit.file ",
+          "-salt -encpy_password -adhaarNumber -apaarId -filePath -fileName"
+        );
 
         if(!response)
             return res.status(404).json({
@@ -135,12 +151,12 @@ exports.getDocuments = async (req, res) => {
 exports.getDocumentsById = async (req, res) => {
     try
     {
-        const response = await Document.findOne({ 
-            student: req.params.studentId.toString()
+        const response = await Document.findOne({
+          student: req.params.studentId.toString(),
         }).populate(
-            'student passportPhoto.file studentSignature.file classTenMarksheet.file gazetteNotification.file adhaarCardFront.file adhaarCardBack.file notarizeAffidavit.file', 
-            '-salt -encpy_password -adhaarNumber -apaarId -filePath -fileName'
-        )
+          "student passportPhoto.file studentSignature.file classTenMarksheet.file gazetteNotification.file adhaarCardFront.file adhaarCardBack.file newspaperCutting.file notarizeAffidavit.file",
+          "-salt -encpy_password -adhaarNumber -apaarId -filePath -fileName"
+        );
         if(!response)
             return res.status(404).json({
                 error: true,
@@ -175,6 +191,7 @@ exports.updateDocumentStudent = async (req, res) => {
             adhaarCardBack,
             gazetteNotification,
             gazetteNotificationSerial,
+            newspaperCutting,
             notarizeAffidavit,
         } = req.body
         const studentId = req.auth._id
@@ -187,22 +204,23 @@ exports.updateDocumentStudent = async (req, res) => {
         adhaarCardBack ? doc.adhaarCardBack = { file: adhaarCardBack } : null
         gazetteNotification ? doc.gazetteNotification = { file: gazetteNotification } : null
         notarizeAffidavit ? doc.notarizeAffidavit = { file: notarizeAffidavit } : null
+        newspaperCutting ? doc.newspaperCutting = { file: newspaperCutting } : null
         gazetteNotificationSerial ? doc.gazetteNotificationSerial = gazetteNotificationSerial : null
 
 
 
         const response = await Document.findOneAndUpdate(
-            {
-                student: studentId.toString()
-            },
-            doc,
-            {
-                new: true
-            }
+          {
+            student: studentId.toString(),
+          },
+          doc,
+          {
+            new: true,
+          }
         ).populate(
-            'student passportPhoto.file studentSignature.file classTenMarksheet.file gazetteNotification.file adhaarCardFront.file adhaarCardBack.file notarizeAffidavit.file', 
-            '-salt -encpy_password -adhaarNumber -apaarId -filePath -fileName'
-        )
+          "student passportPhoto.file studentSignature.file classTenMarksheet.file gazetteNotification.file adhaarCardFront.file adhaarCardBack.file newspaperCutting.file notarizeAffidavit.file",
+          "-salt -encpy_password -adhaarNumber -apaarId -filePath -fileName"
+        );
        
         res.status(200).json({
             success: true,
@@ -232,6 +250,7 @@ exports.updateDocumentAdmin = async (req, res) => {
             adhaarCardFront,
             adhaarCardBack,
             gazetteNotification,
+            newspaperCutting,
             notarizeAffidavit,
             studentId
         } = req.body
@@ -244,21 +263,21 @@ exports.updateDocumentAdmin = async (req, res) => {
         adhaarCardFront ? doc.adhaarCardFront = { remarks: adhaarCardFront } : null
         adhaarCardBack ? doc.adhaarCardBack = { remarks: adhaarCardBack } : null
         gazetteNotification ? doc.gazetteNotification = { remarks: gazetteNotification } : null
+        newspaperCutting ? doc.newspaperCutting = { remarks: newspaperCutting } : null
         notarizeAffidavit ? doc.notarizeAffidavit = { remarks: notarizeAffidavit } : null
 
         const response = await Document.findOneAndUpdate(
-            {
-                student: studentId.toString(),
-
-            },
-            doc,
-            {
-                new: true
-            }
+          {
+            student: studentId.toString(),
+          },
+          doc,
+          {
+            new: true,
+          }
         ).populate(
-            'student passportPhoto.file studentSignature.file classTenMarksheet.file gazetteNotification.file adhaarCardFront.file adhaarCardBack.file notarizeAffidavit.file', 
-            '-salt -encpy_password -adhaarNumber -apaarId -filePath -fileName'
-        )
+          "student passportPhoto.file studentSignature.file classTenMarksheet.file gazetteNotification.file adhaarCardFront.file adhaarCardBack.file newspaperCutting.file notarizeAffidavit.file",
+          "-salt -encpy_password -adhaarNumber -apaarId -filePath -fileName"
+        );
 
        
         res.status(200).json({
