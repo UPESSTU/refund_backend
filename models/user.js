@@ -31,10 +31,10 @@ const userSchema = new Schema(
       required: true,
     },
     role: {
-      type: String,
-      enum: ["STUDENT", "ADMIN"],
-      required: true,
-      default: "STUDENT",
+        type: String,
+        enums: ['STUDENT', 'ADMIN', 'LD', 'FD', 'TD', 'HD', 'APOD', 'CSD'],
+        required: true,
+        default: 'STUDENT'
     },
     sapId: {
       type: Number,
