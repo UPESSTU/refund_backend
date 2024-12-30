@@ -33,7 +33,7 @@ const userSchema = Schema({
     },
     role: {
         type: String,
-        enums: ['STUDENT', 'ADMIN', 'LD', 'FD', 'TD', 'HD', 'APOD', 'CSD'],
+        enums: ['STUDENT', 'ADMIN', 'LIBRARY_DEPT', 'FINANCE_DEPT', 'SRE_DEPT', 'CS_DEPT', 'APO_DEPT', 'SOCS_DEPT', 'SOHST_DEPT', 'SOAE_DEPT', 'SOL_DEPT', 'SOB_DEPT', 'SOD_DEPT'],
         required: true,
         default: 'STUDENT'
     },

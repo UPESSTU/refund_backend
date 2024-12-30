@@ -62,7 +62,7 @@ app.use(
 
 //Middlewares
 app.use(cors({
-    origin: "http://localhost:5173", //Split The ORIGIN String into array
+    origin: "http://localhost:3000", //Split The ORIGIN String into array
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], // Methods Allowed
     allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'x-client-key', 'x-client-token', 'x-client-secret', 'Authorization'], //Headers Allowed
     credentials: true, //Are Credentials Required
