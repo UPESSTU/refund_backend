@@ -1,35 +1,34 @@
-const { Schema, model } = require('mongoose')
-const mongoosePaginate = require('mongoose-paginate-v2')
-
-
-const userSchema = Schema({
-
+const { Schema, model } = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
+const mongoose = require("mongoose");
+const userSchema = new Schema(
+  {
     firstName: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
     lastName: {
-        type: String,
-        trim: true
+      type: String,
+      trim: true,
     },
     username: {
-        type: String,
-        requried: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     emailAddress: {
-        type: String,
-        required: true,
-        unique:true
+      type: String,
+      required: true,
+      unique: true,
     },
     encpy_password: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     salt: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     role: {
         type: String,
@@ -38,41 +37,57 @@ const userSchema = Schema({
         default: 'STUDENT'
     },
     sapId: {
-        type: Number,
-        required: true,
-        unique: true
+      type: Number,
+      required: true,
+      unique: true,
     },
     programName: {
-        type: String
+      type: String,
     },
     batch: {
-        type: String
+      type: String,
     },
     dateOfBirth: {
-        type: Number
+      type: Number,
     },
     schoolName: {
-        type: String,
-        enums: ['SOD', 'SOCS', 'SOL', 'SOB', 'SOAE', 'SOHST'],
+      type: String,
+      enum: [
+        "School of Advanced Engineering",
+        "School of Business",
+        "School of Computer Science",
+        "School of Design",
+        "School of Health Sciences and Technology",
+        "School of Law",
+        "School of Liberal Studies(Liberal Studies)",
+        "School of Liberal Studies(Modern Media)",
+      ],
     },
     adhaarNumber: {
-        type: Number,
-        unique: true
+      type: Number,
+      unique: false,
+      default: null, // Allow null or blank entries
     },
     contactNumber: {
-        type: Number,
-        unique: true
+      type: Number,
+      unique: false,
+      default: null, // Allow null or blank entries
+      //   unique: true,
     },
     apaarId: {
-        type: String,
-        unique: true
-    }
+      type: String,
+      unique: false,
+      default: null, // Allow null or blank entries
+      //   unique: true,
+    },
+  },
+  { timestamps: true }
+);
 
-}, { timestamps: true })
+// Add pagination plugin to the schema
+userSchema.plugin(mongoosePaginate);
 
+// Check if the model already exists to avoid redefinition
+const User = mongoose.models.User || model("User", userSchema);
 
-userSchema.plugin(mongoosePaginate)
-
-const User = model('User', userSchema)
-
-module.exports = User
+module.exports = User;

@@ -181,6 +181,8 @@ exports.updateDueStudent = async (req, res) => {
         sdlDue ? update.sdlDue = sdlDue : null
         alumniRegistrationDue ? update.alumniRegistrationDue = alumniRegistrationDue : null
 
+        
+
         const response = await Due.findOneAndUpdate(
             {
                 student: studentId
@@ -229,7 +231,14 @@ exports.updateDueAdmin = async (req, res) => {
             csdOfferLetterRemark,
             sdlRemark,
             alumniRegistrationRemark,
-            studentId
+            studentId,
+            hostelStatus,
+            financeStatus,
+            libraryStatus,
+            documentStatus,
+            transportStatus,
+            csdOfferLetterStatus,
+            alumniRegistrationStatus
         } = req.body
 
         const update = {}
@@ -243,7 +252,7 @@ exports.updateDueAdmin = async (req, res) => {
         sdlDue ? update.sdlDue = sdlDue : null
         alumniRegistrationDue ? update.alumniRegistrationDue = alumniRegistrationDue : null
 
-        libraryRemark ? update.libraryRemark = libraryDue : null
+        libraryRemark ? update.libraryRemark = libraryRemark : null
         financeRemark ? update.financeRemark = financeRemark : null
         documentRemark ? update.documentRemark = documentRemark : null
         transportRemark ? update.transportRemark = transportRemark : null
@@ -252,6 +261,14 @@ exports.updateDueAdmin = async (req, res) => {
         hostelRemark ? update.hostelRemark = hostelRemark : null
         alumniRegistrationDue ? update.alumniRegistrationRemark = alumniRegistrationRemark : null
 
+        libraryStatus ? update.libraryStatus = libraryStatus : null
+        financeStatus ? update.financeStatus = financeStatus : null
+        documentStatus ? update.documentStatus = documentStatus : null
+        transportStatus ? update.transportStatus = transportStatus : null
+        csdOfferLetterStatus ? update.csdOfferLetterStatus = csdOfferLetterStatus : null
+        sdlStatus ? update.sdlStatus = sdlStatus : null
+        hostelStatus ? update.hostelStatus = hostelStatus : null
+        alumniRegistrationStatus ? update.alumniRegistrationStatus = alumniRegistrationStatus : null
 
         const response = await Due.findOneAndUpdate(
             {

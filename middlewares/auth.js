@@ -15,14 +15,28 @@ const PUBLICKEY = fs.readFileSync(
 )
 
 exports.checkJwt = expressjwt({
-    secret: PUBLICKEY, //Public Key 
-    userProperty: "auth", //Property Of Decrypted JWT Token
-    algorithms: ['RS256'] //Algorithm For JWT Token ( RS256 Currently )
-})
+  secret: PUBLICKEY,
+  userProperty: "auth",
+  algorithms: ["RS256"],
+  getToken: (req) => {
+    // Extract token from the Authorization header or a custom location
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer ")
+    ) {
+      return req.headers.authorization.split(" ")[1];
+    }
+    if (req.query.token) {
+      return req.query.token;
+    }
+    return null; // No token found
+  },
+});
 
 
 
 exports.checkAuthentication = async (req, res, next) => {
+    console.log(req.auth)
     //Check if user exists
     let user = await getUserBy_id(req.auth._id)
     if(user)
