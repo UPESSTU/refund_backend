@@ -47,11 +47,11 @@ exports.checkAuthentication = async (req, res, next) => {
             message: "Unauthorized!"
         })
 }
-
+// 'LIBRARY_DEPT', 'FINANCE_DEPT', 'SRE_DEPT', 'CS_DEPT', 'APO_DEPT', 'SOCS_DEPT', 'SOHST_DEPT', 'SOAE_DEPT', 'SOL_DEPT', 'SOB_DEPT', 'SOD_DEPT'
 exports.checkAdmin = async (req, res, next) => {
     //Check if user exists
     let user = await getUserBy_id(req.auth._id)
-    if(req.auth.user.role === 'ADMIN')
+    if(req.auth.user.role === 'ADMIN' || req.auth.user.role === 'LIBRARY_DEPT' || req.auth.user.role === 'FINANCE_DEPT' || req.auth.user.role === 'SRE_DEPT' || req.auth.user.role === 'CS_DEPT' || req.auth.user.role === 'APO_DEPT' || req.auth.user.role === 'SOCS_DEPT' || req.auth.user.role === 'SOHST_DEPT' || req.auth.user.role === 'SOAE_DEPT' || req.auth.user.role === 'SOL_DEPT' || req.auth.user.role === 'SOB_DEPT' || req.auth.user.role === 'SOD_DEPT')
         next() //Exits So Call The Next Function
     else
         return res.status(401).json({ //Else Call The Error Function

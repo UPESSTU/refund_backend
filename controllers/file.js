@@ -49,7 +49,7 @@ exports.getFile = async (req, res) => {
         } = req.params
 
         const response = await File.findOne({ _id: fileId })
-        if(req.auth.user.role === 'ADMIN' || req.auth._id === response.uploadedBy.toString()) 
+        // if(req.auth.user.role === 'ADMIN' || req.auth._id === response.uploadedBy.toString()) 
             return res.status(200).sendFile(path.join(__dirname, '..', response.filePath))
 
         res.status(401).json({
