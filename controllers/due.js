@@ -222,6 +222,8 @@ exports.updateDueAdmin = async (req, res) => {
             transportDue,
             csdOfferLetterDue,
             sdlDue,
+            sdlStatus,
+            sdlRemark,
             alumniRegistrationDue,
             libraryRemark,
             financeRemark,
@@ -229,7 +231,7 @@ exports.updateDueAdmin = async (req, res) => {
             hostelRemark,
             transportRemark,
             csdOfferLetterRemark,
-            sdlRemark,
+          
             alumniRegistrationRemark,
             studentId,
             hostelStatus,
@@ -290,6 +292,7 @@ exports.updateDueAdmin = async (req, res) => {
     catch(err) 
     {
         logger.error(`Error: ${err.toString()}`)
+        console.log(err)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
