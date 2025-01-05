@@ -115,7 +115,7 @@ const encpy_password = await hashPassword(password, response.salt);
       {
         algorithm: "RS256", //Algorithm
         allowInsecureKeySizes: true, //Must Be False In Production
-        expiresIn: "30min", //Expiry
+        expiresIn: "1d", //Expiry
       }
     );
 
