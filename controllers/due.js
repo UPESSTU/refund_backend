@@ -214,6 +214,7 @@ exports.updateDueStudent = async (req, res) => {
 exports.updateDueAdmin = async (req, res) => {
     try
     {
+        console.log(req.body);
         const {
             libraryDue,
             financeDue,
@@ -241,9 +242,10 @@ exports.updateDueAdmin = async (req, res) => {
             transportStatus,
             csdOfferLetterStatus,
             alumniRegistrationStatus
-        } = req.body
+        } = req.body[0]
 
         const update = {}
+        console.log(studentId);
 
         libraryDue ? update.libraryDue = libraryDue : null
         financeDue ? update.financeDue = financeDue : null
