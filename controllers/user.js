@@ -99,6 +99,7 @@ exports.updateStudent = async (req, res) => {
             adhaarNumber,
             apaarId,
             programName,
+            contactNumber
         } = req.body
 
         if(adhaarNumber === "" || !adhaarNumber)
@@ -118,6 +119,11 @@ exports.updateStudent = async (req, res) => {
                 error: true,
                 message: "An Unexpected Error Occurrred",
             })
+        if(contactNumber === "" || !contactNumber)
+            return res.status(400).json({
+                error: true,
+                message: "An Unexpected Error Occurrred",
+            })
 
         const date = new Date(dateOfBirth)
         const unixTimestamp = Math.floor(date.getTime() / 1000)
@@ -130,7 +136,8 @@ exports.updateStudent = async (req, res) => {
                 adhaarNumber: adhaarNumber,
                 apaarId: apaarId,
                 dateOfBirth: unixTimestamp,
-                programName: programName
+                programName: programName,
+                contactNumber: contactNumber
             },
             {
                 new: true
