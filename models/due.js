@@ -19,7 +19,8 @@ const dueSchema = Schema({
     },
     libraryStatus: {
         type: String,
-        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED']
+        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED'],
+        default: 'PENDING'
     },
     financeDue: {
         type: String,
@@ -30,7 +31,8 @@ const dueSchema = Schema({
     },
     financeStatus: {
         type: String,
-        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED']
+        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED'],
+        default: 'PENDING'
     },
     documentDue: {
         type: String,
@@ -41,7 +43,8 @@ const dueSchema = Schema({
     },
     documentStatus: {
         type: String,
-        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED']
+        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED'],
+        default: 'PENDING'
     },
     hostelDue: {
         type: String,
@@ -52,7 +55,8 @@ const dueSchema = Schema({
     },
     hostelStatus: {
         type: String,
-        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED']
+        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED'],
+        default: 'PENDING'
     },
     transportDue: {
         type: String,
@@ -63,7 +67,8 @@ const dueSchema = Schema({
     },
     transportStatus: {
         type: String,
-        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED']
+        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED'],
+        default: 'PENDING'
     },
     sdlDue: { //School/Department/Labs
         type: String,
@@ -74,18 +79,21 @@ const dueSchema = Schema({
     },
     sdlStatus: {
         type: String,
-        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED']
+        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED'],
+        default: 'PENDING'
     },
     csdOfferLetterDue: {
         type: String,
         enums: ['YES', 'NO', 'NOT APPLICABLE'],
+        
     },
     csdOfferLetterRemark: {
         type: String,
     },
     csdOfferLetterStatus: {
         type: String,
-        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED']
+        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED'],
+        default: 'PENDING'
     },
     alumniRegistrationDue: {
         type: String,
@@ -96,7 +104,8 @@ const dueSchema = Schema({
     },
     alumniRegistrationStatus: {
         type: String,
-        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED']
+        enums: ['PENDING', 'IN-REVIEW', 'SUCCESS', 'REJECTED'],
+        default: 'PENDING'
     },
 }, { timestamps: true })
 
