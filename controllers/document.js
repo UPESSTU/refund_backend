@@ -3,8 +3,6 @@ const Document = require('../models/document')
 const logger = require('../utils/logger')
 
 exports.createDocument = async (req, res) => {
-    console.log("got here");
-    console.log(req.body);
     try
     {
         const {

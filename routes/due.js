@@ -2,7 +2,9 @@ const { Router } = require('express')
 
 const { 
     checkAdmin,
-    checkStudent
+    checkStudent,
+    checkJwt,
+    checkAuthentication
 } = require('../middlewares/auth')
 
 const { 
@@ -11,8 +13,11 @@ const {
     getDue, 
     updateDueStudent,
     updateDueAdmin,
-    getAllDues
+    getAllDues,
+    uploadDueCsvData
 } = require('../controllers/due')
+
+const { upload } = require('../utils/upload')
 
 /**
  * @swagger   
@@ -34,6 +39,36 @@ const {
  */
 
 const router = Router()
+
+router.post('/upload-csv', upload.single('file'), checkJwt, checkAuthentication, checkAdmin, uploadDueCsvData)
+/**
+ * @swagger
+ * /due/upload-csv:
+ *   post:
+ *     summary: CSV Upload Due
+ *     tags: [Due]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             $ref: '#/components/schemas/File'
+ *     responses:
+ *       201:
+ *         description: Successfull CSV Upload
+ *         content:
+ *           application/json:
+ *             $ref: '#/components/schemas/User'
+ *       401:
+ *          description: Unauthorized Access
+ *       400:
+ *          description: Invalid input
+ *       500:
+ *         description: Some server error
+ *
+ */
 
 router.post('/create', checkStudent, createDue)
 /**

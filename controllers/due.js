@@ -1,9 +1,12 @@
+const fs = require('fs')
+const csvParser = require("csv-parser");
 const Due = require('../models/due')
+const User = require('../models/user')
 const logger = require('../utils/logger')
 
+//Create Due 
 exports.createDue = async (req, res) => {
-    try
-    {
+    try {
         const {
             libraryDue,
             financeDue,
@@ -14,7 +17,7 @@ exports.createDue = async (req, res) => {
             sdlDue,
             alumniRegistrationDue
         } = req.body
-        if(!(libraryDue && financeDue && documentDue && hostelDue && transportDue && csdOfferLetterDue && sdlDue && alumniRegistrationDue))
+        if (!(libraryDue && financeDue && documentDue && hostelDue && transportDue && csdOfferLetterDue && sdlDue && alumniRegistrationDue))
             return res.status(400).json({
                 error: true,
                 message: 'An Unexpected Error Occured'
@@ -40,8 +43,7 @@ exports.createDue = async (req, res) => {
             dbRes: response
         })
     }
-    catch(err) 
-    {
+    catch (err) {
         logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
@@ -52,14 +54,14 @@ exports.createDue = async (req, res) => {
     }
 }
 
+//Get Due
 exports.getDue = async (req, res) => {
-    try
-    {
-        const response = await Due.findOne({ 
-            student: req.auth._id 
+    try {
+        const response = await Due.findOne({
+            student: req.auth._id
         }).populate('student', '-salt -encpy_password -adhaarNumber -apaarId')
 
-        if(!response)
+        if (!response)
             return res.status(404).json({
                 error: true,
                 message: 'Due Not Found'
@@ -70,8 +72,7 @@ exports.getDue = async (req, res) => {
             dbRes: response
         })
     }
-    catch(err) 
-    {
+    catch (err) {
         logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
@@ -82,9 +83,9 @@ exports.getDue = async (req, res) => {
     }
 }
 
+//Get All Dues
 exports.getAllDues = async (req, res) => {
-    try
-    {
+    try {
         const {
             page,
             limit
@@ -99,9 +100,9 @@ exports.getAllDues = async (req, res) => {
                 select: 'firstName lastName sapId emailAddress schoolName programName batch'
             },
         }
-        
-        const response = await Due.paginate({  }, options)
-        if(!response)
+
+        const response = await Due.paginate({}, options)
+        if (!response)
             return res.status(404).json({
                 error: true,
                 message: 'Dues Not Found'
@@ -113,8 +114,7 @@ exports.getAllDues = async (req, res) => {
             dbRes: response
         })
     }
-    catch(err) 
-    {
+    catch (err) {
         logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
@@ -125,15 +125,14 @@ exports.getAllDues = async (req, res) => {
     }
 }
 
-
+//Get Due By ID
 exports.getDueById = async (req, res) => {
-    try
-    {
-        const response = await Due.findOne({ 
+    try {
+        const response = await Due.findOne({
             student: req.params.studentId.toString()
         }).populate('student', '-salt -encpy_password -adhaarNumber -apaarId')
 
-        if(!response)
+        if (!response)
             return res.status(404).json({
                 error: true,
                 message: 'Due Not Found'
@@ -144,8 +143,7 @@ exports.getDueById = async (req, res) => {
             dbRes: response
         })
     }
-    catch(err) 
-    {
+    catch (err) {
         logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
@@ -156,9 +154,9 @@ exports.getDueById = async (req, res) => {
     }
 }
 
+//Update Due Student
 exports.updateDueStudent = async (req, res) => {
-    try
-    {
+    try {
         const {
             libraryDue,
             financeDue,
@@ -181,7 +179,7 @@ exports.updateDueStudent = async (req, res) => {
         sdlDue ? update.sdlDue = sdlDue : null
         alumniRegistrationDue ? update.alumniRegistrationDue = alumniRegistrationDue : null
 
-        
+
 
         const response = await Due.findOneAndUpdate(
             {
@@ -192,15 +190,14 @@ exports.updateDueStudent = async (req, res) => {
                 new: true
             }
         )
-       
+
         res.status(200).json({
             success: true,
             message: 'Due Updated By Student!',
             dbRes: response
         })
     }
-    catch(err) 
-    {
+    catch (err) {
         logger.error(`Error: ${err.toString()}`)
         res.status(400).json({
             error: true,
@@ -211,10 +208,9 @@ exports.updateDueStudent = async (req, res) => {
     }
 }
 
+//Update Due Admin
 exports.updateDueAdmin = async (req, res) => {
-    try
-    {
-        console.log(req.body);
+    try {
         const {
             libraryDue,
             financeDue,
@@ -232,7 +228,7 @@ exports.updateDueAdmin = async (req, res) => {
             hostelRemark,
             transportRemark,
             csdOfferLetterRemark,
-          
+
             alumniRegistrationRemark,
             studentId,
             hostelStatus,
@@ -245,7 +241,6 @@ exports.updateDueAdmin = async (req, res) => {
         } = req.body[0]
 
         const update = {}
-        console.log(studentId);
 
         libraryDue ? update.libraryDue = libraryDue : null
         financeDue ? update.financeDue = financeDue : null
@@ -284,17 +279,14 @@ exports.updateDueAdmin = async (req, res) => {
             }
         )
 
-       
         res.status(200).json({
             success: true,
             message: 'Due Updated By Admin',
             dbRes: response
         })
     }
-    catch(err) 
-    {
+    catch (err) {
         logger.error(`Error: ${err.toString()}`)
-        console.log(err)
         res.status(400).json({
             error: true,
             message: 'An Unexpected Error Occured',
@@ -302,4 +294,92 @@ exports.updateDueAdmin = async (req, res) => {
             errorString: err.toString()
         })
     }
+}
+
+exports.uploadDueCsvData = async (req, res) => {
+
+    try {
+        const data = []
+        const filePath = req.file.path
+
+        const allowedFieldsByRole = {
+            LIBRARY_DEPT: ['libraryDue', 'libraryRemark', 'libraryStatus'],
+            FINANCE_DEPT: ['financeDue', 'financeRemark', 'financeStatus'],
+            SRE_DEPT: ['documentDue', 'documentRemark', 'documentStatus'],
+            APO_DEPT: ['hostelDue', 'hostelRemark', 'hostelStatus', 'transportDue', 'transportRemark', 'transportStatus'],
+            SDL_DEPT: ['sdlDue', 'sdlRemark', 'sdlStatus'],
+            CSD_DEPT: ['csdOfferLetterDue', 'csdOfferLetterRemark', 'csdOfferLetterStatus'],
+            ALUMNI_DEPT: ['alumniRegistrationDue', 'alumniRegistrationRemark', 'alumniRegistrationStatus'],
+            ADMIN: [
+                'libraryDue', 'libraryRemark', 'libraryStatus',
+                'financeDue', 'financeRemark', 'financeStatus',
+                'documentDue', 'documentRemark', 'documentStatus',
+                'hostelDue', 'hostelRemark', 'hostelStatus',
+                'transportDue', 'transportRemark', 'transportStatus',
+                'sdlDue', 'sdlRemark', 'sdlStatus',
+                'csdOfferLetterDue', 'csdOfferLetterRemark', 'csdOfferLetterStatus',
+                'alumniRegistrationDue', 'alumniRegistrationRemark', 'alumniRegistrationStatus'
+            ]
+        }
+
+        const allowedFields = allowedFieldsByRole[req.auth.user.role]
+
+        if (!allowedFields)
+            return res.status(403).json({ message: 'You are not authorized to update' })
+
+
+
+        fs.createReadStream(filePath)
+            .pipe(csvParser())
+            .on("data", (row) => {
+                const filteredRow = Object.keys(row)
+                    .filter((key) => allowedFields.includes(key))
+                    .reduce((obj, key) => {
+                        obj[key] = row[key]
+                        return obj
+                    }, {})
+
+                if (Object.keys(filteredRow).length > 0) {
+                    data.push(filteredRow)
+                }
+            })
+            .on("end", async () => {
+                console.log(data)
+                for (const item of data) {
+
+                    const user = await User.findOne({ sapId: item.sapId })
+
+                    await Due.updateOne(
+                        {
+                            student: user._id
+                        },
+                        {
+                            $set: item
+                        },
+                        {
+                            upsert: true
+                        }
+                    )
+                }
+                fs.unlinkSync(filePath)
+                res.status(201).json({
+                    success: true,
+                    message: "CSV data processed successfully"
+                })
+            })
+
+    }
+    catch (err) {
+
+        logger.error(`Error: ${err.toString()}`)
+
+        res.status(400).json({
+            error: true,
+            message: 'An Unexpected Error Occured',
+            errorJson: err,
+            errorString: err.toString()
+        })
+
+    }
+
 }

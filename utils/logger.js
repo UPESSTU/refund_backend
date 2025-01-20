@@ -1,6 +1,6 @@
-const { createLogger, transports, format } = require('winston');
-const path = require('path');
-require('winston-daily-rotate-file');
+const { createLogger, transports, format } = require('winston')
+const path = require('path')
+require('winston-daily-rotate-file')
 
 const logger = createLogger({
   level: 'info',
@@ -28,6 +28,6 @@ const logger = createLogger({
       ),
     }),
   ],
-});
+})
 
-module.exports = logger;
+module.exports = logger

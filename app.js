@@ -1,23 +1,23 @@
 //NPM Imports
-require("dotenv").config();
+require("dotenv").config()
 
 const express = require("express"),
   mongoose = require("mongoose"),
   cors = require("cors"),
-  bodyParser = require("body-parser"),
   swaggerJsdoc = require("swagger-jsdoc"),
   swaggerUi = require("swagger-ui-express"),
   logger = require("./utils/logger"),
-  rateLimiter = require("./utils/rateLimiter");
+  rateLimiter = require("./utils/rateLimiter")
 
 //Route Imports
 const authRoutes = require("./routes/auth"),
   dueRoutes = require("./routes/due"),
   documentRoutes = require("./routes/document"),
   userRoutes = require("./routes/user"),
-  fileRoutes = require("./routes/file");
+  fileRoutes = require("./routes/file")
 
-const { checkJwt, checkAuthentication } = require("./middlewares/auth");
+//Middleware Authentication
+const { checkJwt, checkAuthentication } = require("./middlewares/auth")
 
 const options = {
   definition: {
@@ -38,17 +38,16 @@ const options = {
     ],
   },
   apis: ["./routes/*.js"],
-};
+}
 
 //Configuration
-const PORT = process.env.PORT || 8000;
-const DATBASE_URI = process.env.DATABASE_URI;
-const specs = swaggerJsdoc(options);
+const PORT = process.env.PORT || 8000
+const DATBASE_URI = process.env.DATABASE_URI
+const specs = swaggerJsdoc(options)
 
-const app = express(); //Init Express App
-const csvFilePath = "data1.csv";
+const app = express() //Init Express App
 
-app.use(rateLimiter);
+app.use(rateLimiter) //Rate Limiter 
 
 app.use(
   "/docs",
@@ -56,7 +55,7 @@ app.use(
   swaggerUi.setup(specs, {
     customSiteTitle: "UPES Refund Application API Documentation",
   })
-);
+)
 
 //Middlewares
 app.use(
@@ -75,16 +74,16 @@ app.use(
     ], //Headers Allowed
     credentials: true, //Are Credentials Required
   })
-);
+)
 
-app.use(express.json());
+app.use(express.json())
 
 //Routes
-app.use("/auth", authRoutes);
-app.use("/user", checkJwt, checkAuthentication, userRoutes);
-app.use("/due", checkJwt, checkAuthentication, dueRoutes);
-app.use("/document", checkJwt, checkAuthentication, documentRoutes);
-app.use("/file", checkJwt, checkAuthentication, fileRoutes);
+app.use("/auth", authRoutes)
+app.use("/user", checkJwt, checkAuthentication, userRoutes)
+app.use("/due", checkJwt, checkAuthentication, dueRoutes)
+app.use("/document", checkJwt, checkAuthentication, documentRoutes)
+app.use("/file", checkJwt, checkAuthentication, fileRoutes)
 
 //Middleware Custom Response
 app.use(async (err, req, res, next) => {
@@ -95,21 +94,21 @@ app.use(async (err, req, res, next) => {
       error: true,
       // message: `${err.inner.name}: ${err.inner.message}`,
       message: "Unauthorized!",
-    });
-  else next(err); //If No Error Take Call The Next Function
-});
+    })
+  else next(err) //If No Error Take Call The Next Function
+})
 
 //Database Connection
 mongoose
   .connect(DATBASE_URI, {})
   .then(() => {
-    logger.info("Database Connected!");
+    logger.info("Database Connected!")
     app.listen(PORT, () => {
-      logger.info(`Server Running At PORT: ${PORT}`);
-    });
+      logger.info(`Server Running At PORT: ${PORT}`)
+    })
   })
   .catch((err) => {
-    logger.error(`Error: ${err.toString()}`);
-  });
+    logger.error(`Error: ${err.toString()}`)
+  })
 
-// uploadCsvData(csvFilePath);
+// uploadCsvData(csvFilePath)

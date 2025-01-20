@@ -18,25 +18,24 @@ exports.checkJwt = expressjwt({
   secret: PUBLICKEY,
   userProperty: "auth",
   algorithms: ["RS256"],
-  getToken: (req) => {
-    // Extract token from the Authorization header or a custom location
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer ")
-    ) {
-      return req.headers.authorization.split(" ")[1];
-    }
-    if (req.query.token) {
-      return req.query.token;
-    }
-    return null; // No token found
-  },
+//   getToken: (req) => {
+//     // Extract token from the Authorization header or a custom location
+//     if (
+//       req.headers.authorization &&
+//       req.headers.authorization.startsWith("Bearer ")
+//     ) {
+//       return req.headers.authorization.split(" ")[1];
+//     }
+//     if (req.query.token) {
+//       return req.query.token;
+//     }
+//     return null; // No token found
+//   },
 });
 
 
 
 exports.checkAuthentication = async (req, res, next) => {
-    console.log(req.auth)
     //Check if user exists
     let user = await getUserBy_id(req.auth._id)
     if(user)

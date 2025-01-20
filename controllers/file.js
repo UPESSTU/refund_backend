@@ -1,11 +1,12 @@
 const File = require('../models/file')
 const path = require('path')
 const logger = require('../utils/logger')
+
+
 exports.newFile = async (req, res) => {
 
     try
     {
-        console.log(req.file)
         const {
             filename,
             path,
