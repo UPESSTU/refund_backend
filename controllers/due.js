@@ -85,6 +85,34 @@ exports.getDue = async (req, res) => {
 
 //Get All Dues
 exports.getAllDues = async (req, res) => {
+    const fields = [
+     
+        "libraryDue",
+        "libraryRemark",
+        "libraryStatus",
+        "financeDue",
+        "financeRemark",
+        "financeStatus",
+        "documentDue",
+        "documentRemark",
+        "documentStatus",
+        "hostelDue",
+        "hostelRemark",
+        "hostelStatus",
+        "transportDue",
+        "transportRemark",
+        "transportStatus",
+        "sdlDue",
+        "sdlRemark",
+        "sdlStatus",
+        "csdOfferLetterDue",
+        "csdOfferLetterRemark",
+        "csdOfferLetterStatus",
+        "alumniRegistrationDue",
+        "alumniRegistrationRemark",
+        "alumniRegistrationStatus"
+      
+]
     try {
         const {
             page,
@@ -92,16 +120,16 @@ exports.getAllDues = async (req, res) => {
         } = req.query
         const options = {
             page: page ? page : 1,
-            limit: limit ? limit : 10,
+            limit: limit ? limit : 100,
             sort: { sapId: 1, schoolName: 1 },
-            select: '_id createdAt updatedAt',
+            select: '_id createdAt updatedAt libraryDue libraryRemark libraryStatus financeDue financeRemark financeStatus documentDue documentRemark documentStatus hostelDue hostelRemark hostelStatus transportDue transportRemark transportStatus sdlDue sdlRemark sdlStatus csdOfferLetterDue csdOfferLetterRemark csdOfferLetterStatus alumniRegistrationDue alumniRegistrationRemark alumniRegistrationStatus',
             populate: {
-                path: 'student',
-                select: 'firstName lastName sapId emailAddress schoolName programName batch'
+            path: 'student',
+            select: 'firstName lastName sapId emailAddress schoolName programName batch'
             },
         }
 
-        const response = await Due.paginate({}, options)
+        const response = await Due.find({}, {}, options)
         if (!response)
             return res.status(404).json({
                 error: true,
@@ -124,6 +152,8 @@ exports.getAllDues = async (req, res) => {
         })
     }
 }
+// get all due
+
 
 //Get Due By ID
 exports.getDueById = async (req, res) => {
@@ -332,22 +362,26 @@ exports.uploadDueCsvData = async (req, res) => {
         fs.createReadStream(filePath)
             .pipe(csvParser())
             .on("data", (row) => {
-                const filteredRow = Object.keys(row)
-                    .filter((key) => allowedFields.includes(key))
-                    .reduce((obj, key) => {
-                        obj[key] = row[key]
-                        return obj
-                    }, {})
+            const filteredRow = Object.keys(row)
+                .filter((key) => allowedFields.includes(key) || key === 'sapId')
+                .reduce((obj, key) => {
+                obj[key] = row[key]
+                return obj
+                }, {})
 
-                if (Object.keys(filteredRow).length > 0) {
-                    data.push(filteredRow)
-                }
+            if (Object.keys(filteredRow).length > 0) {
+                data.push(filteredRow)
+
+
+            }
             })
             .on("end", async () => {
                 console.log(data)
                 for (const item of data) {
 
+                    console.log(item)
                     const user = await User.findOne({ sapId: item.sapId })
+                    console.log(user)
 
                     await Due.updateOne(
                         {
